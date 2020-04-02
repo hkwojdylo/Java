@@ -1,0 +1,31 @@
+/** Problem2 main method that reads in file from command line and inserts in AVL. All lowercase and removes all non alpha-numeric 
+ * punctuation. The regex code pulled from https://stackoverflow.com/questions/5988228/how-to-create-a-regex-for-accepting-only-alphanumeric-characters
+ * Then calls printIndex to show all unique words and their corresponding lines. Also shows blank lines.
+*/
+
+import java.util.*;
+import java.io.*;
+
+public class Problem2{
+    public static void main (String [] args) throws IOException{ 
+        String fileName = null;
+        if (0 < args.length)
+           fileName = (String)args[0];
+        
+        AvlTree dict = new AvlTree();
+        Scanner reader = new Scanner(new File(fileName));
+        
+        int line = 1;
+        while(reader.hasNextLine()){
+            String s = reader.nextLine();
+            String [] words = s.split(" ");
+            for(int x = 0; x<words.length; x++){
+                dict.indexWord(words[x].replaceAll("[^a-zA-Z0-9]*", "").toLowerCase(), line); // regex pulled from https://stackoverflow.com/questions/5988228/how-to-create-a-regex-for-accepting-only-alphanumeric-characters
+            }
+            line++;
+        }
+        
+        
+        dict.printIndex();
+    }
+}
