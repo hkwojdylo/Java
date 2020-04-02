@@ -1,0 +1,18 @@
+/** This is my ExpressionTree main method, to change the input simply change the top string in main. All methods are then
+ * implemented and shown.
+ * */
+public class Problem1{
+    
+    public static void main(String [] args){
+        String input = "2 7 + 1 1 / 12 - *";
+        ExrpressionTree et = new ExrpressionTree(input);
+        if(et.isValid()){
+            System.out.println("Here is the tree evaluated: "+ et.eval());
+            System.out.println("Here is the postfix of the tree: " + et.postfix());
+            System.out.println("Here is the prefix of the tree: " + et.prefix());
+            System.out.println("Here is the infix of the tree: " + et.infix());
+        }else{
+            System.out.println("The input was an invalid postfix expression!");
+        }
+    }
+}
