@@ -1,0 +1,40 @@
+/* The TwoStackQueue class that uses to stacks and acts like a queue
+ * */
+
+public class TwoStackQueue <AnyType> implements MyQueue<AnyType> {
+    
+    private MyStack s1, s2;
+    
+    public TwoStackQueue (){
+        s1 = new MyStack();
+        s2 = new MyStack();
+    }
+    
+    public void enqueue(AnyType x){
+        s1.push(x);
+    }
+    
+    public AnyType dequeue(){
+        if(s2.isEmpty()){
+            while(!s1.isEmpty()){
+                AnyType x = (AnyType) s1.pop();
+                s2.push(x);
+            }
+        }
+        
+        if(isEmpty()){
+            String s = "The queue was empty with nothing to throw!";
+            return (AnyType) s;
+        }else{
+            return (AnyType)s2.pop();
+        }
+    }
+    
+    public int size(){
+         return s2.size() + s1.size();
+    }
+    
+    public boolean isEmpty(){
+        return (s2.isEmpty() && s1.isEmpty());
+    }
+}
