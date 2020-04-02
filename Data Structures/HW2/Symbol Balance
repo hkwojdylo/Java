@@ -1,0 +1,85 @@
+/* The SymbolBalance class the tests if a file given in using the name of (example) Test.java, finds the files in the TestFiles directory
+ * tests for unbalanced cases of {}, [], "", (), and comments, 
+ * also contains the main method to read in the user inputted name if the file and run the actual testing method called checkSymbol
+ * */
+
+import java.io.*;
+import java.util.*;
+
+public class SymbolBalance {
+    
+    private MyStack stack;
+    
+    public SymbolBalance(){
+        stack = new MyStack();
+    }
+    
+    public String checkSymbol(String fileName) throws IOException{
+        BufferedReader fileReader = new BufferedReader(new FileReader("TestFiles/"+fileName));
+        int x;
+        int beacon = 0;
+        while((x = fileReader.read()) != -1){
+            char c = (char)x;
+            
+            if(beacon == 0){
+                if(c == '{' || c == '(' || c == '['){
+                    stack.push(c);
+                }else if(c == '*'){
+                    stack.push(c);
+                    beacon = 1;
+                }else if(c == '"'){
+                    stack.push(c);
+                    beacon = 2;
+                }else if(c == '}'){
+                    if(stack.isEmpty() || stack.pop() != '{'){
+                        return "Unbalanced! Symbol } is mismatched"; 
+                    }
+                }else if(c == ')'){
+                    if(stack.isEmpty() || stack.pop() != '('){
+                        return "Unbalanced! Symbol ) is mismatched";
+                    }
+                }else if(c == ']'){
+                    if(stack.isEmpty() || stack.pop() != '['){
+                        return "Unbalanced! Symbol ] is mismatched";
+                    }
+                }
+            }else if(beacon == 1){
+                if(c == '*'){
+                    if (fileReader.read() == '/'){
+                        if(stack.isEmpty() || stack.pop() != '*'){
+                        return "Unbalanced! Symbol */ is mismatched";
+                        }
+                        beacon = 0;
+                    }
+                }
+            }else if(beacon == 2){
+                if(c == '"'){
+                    if(stack.isEmpty() || stack.pop() != '"'){
+                        return "Unbalanced! Symbol \" is mismatched";
+                    }
+                    beacon = 0;
+                }
+            } 
+        }
+            if(stack.isEmpty()){
+                return "File was matched";
+            }else{
+                return "Unbalanced! Symbol " + stack.pop() +" is unmatched";
+            }
+            
+    }
+    
+/*the main method that takes in user unputted file name and runs the SymbolBalance check on it
+ * */
+
+public static void main (String [] args)throws IOException{
+    
+    Scanner reader = new Scanner(System.in);
+    System.out.println("Please enter the name of the file (Example: Test.java) :");
+    String file = reader.nextLine();
+    SymbolBalance mySB = new SymbolBalance();
+    System.out.println(mySB.checkSymbol(file));
+
+    
+    }
+}
