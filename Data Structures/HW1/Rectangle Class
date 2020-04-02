@@ -1,0 +1,36 @@
+/* Helen Wojdylo
+ * hkw2116
+ * Rectangle class that implements Comparable with the specific type of Rectangle
+ * has the compareTo method using the perimeters to determine the result
+ * has regular getter methods as well */
+
+public class Rectangle implements Comparable<Rectangle>{
+    private int length, width;
+    
+    public Rectangle(int inL, int inW){
+        length = inL;
+        width = inW;
+    }
+    
+    public int getLength(){
+        return length;
+    }
+    
+    public int getWidth(){
+        return width;
+    }
+    
+    public String toString(){
+        return "length of "+ length + " and width of "+ width;
+    }
+    
+    public int compareTo(Rectangle r){
+        int perim1 = 2*(length+width);
+        int perim2 = 2*(r.getLength()+r.getWidth());
+        if(perim1 < perim2)
+            return -1;
+        if(perim1 > perim2)
+            return 1;
+        return 0;
+    }
+}
