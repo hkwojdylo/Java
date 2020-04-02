@@ -1,0 +1,42 @@
+import java.util.*;
+/* Helen Wojdylo
+ * hkw2116
+ * Problem2 solution class
+ * binarySearch method recursively done using the given code in class and suggestion of helper class said in lecture
+ * uses Rectangle classes implementation when creating the rectangles in main, and it's compareTo method in the helpermethod */
+
+
+public class Problem2{
+    
+    public static <AnyType extends Comparable<AnyType>> int binarySearch(AnyType[] a, AnyType x){
+        return binarySearch(a, x, 0, a.length-1);
+    }
+    
+    public static <AnyType extends Comparable<AnyType>> int binarySearch(AnyType[] a, AnyType x, int start, int stop){
+        while (start <= stop){
+            int middle = (start+stop)/2;
+            if(a[middle].compareTo(x)<0){
+                return binarySearch(a, x, middle + 1, stop);
+            }else if (a[middle].compareTo(x)>0){
+                return binarySearch(a, x, start, middle - 1);
+            }else
+                return middle;
+        }
+        return -1;   
+    }
+
+    public static void main(String[] args) {
+    
+        Rectangle r1 = new Rectangle(10, 20);
+        Rectangle r2 = new Rectangle(20, 20);
+        Rectangle r3 = new Rectangle(30, 40);
+        Rectangle r4 = new Rectangle(10, 20);
+        Rectangle r5 = new Rectangle(10, 30);
+      
+        Rectangle [] list = new Rectangle[]{r1, r2, r3, r4, r5};
+        
+        Rectangle findMe = new Rectangle(10, 30);
+        Arrays.sort(list);
+        System.out.println("The rectangle is at the  " + binarySearch(list, findMe) + " position in the array");
+    }
+}
