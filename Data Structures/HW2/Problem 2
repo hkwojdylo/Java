@@ -1,0 +1,27 @@
+/* This is the testing class of the TwoStackQueue class, works with integers and the tester class also given to us worked as well
+*/
+
+public class Problem2 {
+    
+    public static void main (String [] args){
+        TwoStackQueue<Integer> queue = new TwoStackQueue<Integer>();
+        
+        System.out.println(queue.dequeue());
+        queue.enqueue(2);
+        queue.enqueue(4);
+        System.out.println(queue.dequeue());
+        System.out.println("Size: " + queue.size());
+        queue.enqueue(6);
+        queue.enqueue(17);
+        queue.enqueue(24);
+        System.out.println(queue.dequeue());
+        System.out.println(queue.isEmpty());
+        System.out.println("Size: " + queue.size());
+        queue.enqueue(156);
+        
+        while(!queue.isEmpty()){
+            System.out.println(queue.dequeue());
+        }
+        
+    }
+}
