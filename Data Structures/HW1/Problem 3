@@ -1,0 +1,36 @@
+/* Helen Wojdylo
+ * hkw2116
+ * Problem3 running of each given fragment from the written homework
+ * put each fragment in a method so they can easily be switched between in main (currently on foo cause that's the last one I tested) */
+
+public class Problem3{
+    
+    public static void frag1(int n){
+        int sum = 0;
+        for ( int i = 0; i < 23; i ++)
+            for ( int j = 0; j < n ; j ++)
+                sum = sum + 1;
+    }
+    
+    public static void frag2(int n){
+        int sum = 0;
+        for ( int i = 0; i < n ; i ++)
+            for ( int k = i ; k < n ; k ++)
+                sum = sum + 1;
+    }
+    
+    public static int foo(int n, int k) {
+        if(n<=k)
+            return 1;
+        else
+            return foo(n/k,k) + 1;
+    }
+
+    public static void main (String [] args){
+        long startTime = System.nanoTime();
+        foo(1000, 2);
+        long endTime = System.nanoTime();
+        System.out.println("Time elapsed: " + (endTime-startTime));
+    }
+}
+
