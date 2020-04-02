@@ -1,0 +1,37 @@
+import java.util.*;
+
+/* Helen Wojdylo
+ * hkw2116
+ * Problem1 solution class with set rectangles of specific lengths and widths set into an array
+ * implements the findMax given in the assignment */
+
+public class Problem1 {
+  
+  public static <AnyType extends Comparable<AnyType>>  AnyType findMax(AnyType[] arr) {
+    int maxIndex = 0;
+    for (int i = 1; i < arr.length; i++)
+      if ( arr[i].compareTo(arr[maxIndex]) > 0 )
+         maxIndex = i;
+      return arr[maxIndex];
+  }
+  
+  
+  public static final void main(String[] args) {
+    
+    Rectangle r1 = new Rectangle(10, 20);
+    Rectangle r2 = new Rectangle(20, 20);
+    Rectangle r3 = new Rectangle(30, 40);
+    Rectangle r4 = new Rectangle(10, 20);
+    Rectangle r5 = new Rectangle(10, 30);
+      
+    Rectangle [] list = new Rectangle[]{r1, r2, r3, r4, r5};
+      
+    System.out.println("The largest rectangle has a " + findMax(list));
+      
+      
+    
+    
+  }
+  
+ 
+}
