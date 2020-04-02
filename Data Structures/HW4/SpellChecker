@@ -1,0 +1,109 @@
+/* SpellChecker class that take in two command line arguments, first being the dictionary, second the checked file. 
+ * must be in fileName.txt
+ * runs add letter, remove letter, and switch letter on misspelled words.
+ * returns all misspelled words with each line number and possible suggestions. 
+ * NOTE: correctly spelled words may say misspelled because not in dictionary (case in point: my last name, Wojdylo) 
+ */
+import java.io.*;
+import java.util.*;
+
+public class SpellChecker{
+    
+    
+    public static void main (String [] args) throws IOException {
+        HashSet dictFile = new HashSet();
+        Scanner reader = new Scanner(new File((String)args[0]) );
+        while (reader.hasNext()){
+            dictFile.add(reader.next());
+        }
+        
+        Scanner scanner = new Scanner(new File((String)args[1]));
+        LinkedList<String> sugg = new LinkedList<String>();
+        int lineNumber = 0;
+        
+        while (scanner.hasNextLine()){
+            String s = scanner.nextLine();
+            String [] line = s.split(" ");
+            for(int x =0; x< line.length; x++){
+                String regex = "(?:(?<!\\S)\\p{Punct}+)|(?:\\p{Punct}+(?!\\S))";// regex taken from https://stackoverflow.com/questions/43171774/how-to-remove-exterior-punctuation-from-a-string-using-regular-expressions
+                String check = line[x].replaceAll(regex, "").toLowerCase();
+                if(!dictFile.contains(check)){
+                    sugg = addLetter(check, dictFile, sugg);
+                    sugg = remLetter(check, dictFile, sugg);
+                    sugg = swpLetter(check, dictFile, sugg);
+                    
+                    if(sugg.isEmpty()){
+                        System.out.println("The word: "+ line[x] + " on line " + lineNumber + " is misspelled. Possible words: no suggestions");
+                    }else{
+                        System.out.println("The word: "+ line[x] + " on line " + lineNumber + " is misspelled. Possible words: " + 
+                                           sugg);
+                    }
+                }else
+                    ;
+                
+                sugg = new LinkedList<String>();
+            }
+            lineNumber++;
+        }
+    }
+    
+    public static LinkedList<String> addLetter(String word, HashSet dict, LinkedList sugg){
+        String newWord = "";
+        StringBuffer add = new StringBuffer(word);
+        
+        for(int x = 0; x< word.length(); x++){
+            for(char letter = 'a'; letter <= 'z'; letter ++){
+                newWord = add.insert(x, letter).toString();
+                if(dict.contains(newWord)){
+                    sugg.add(newWord);
+                }
+                
+                add = new StringBuffer(word);
+            }
+        }
+        
+        for(int y = 0; y< word.length(); y++){
+            newWord = add.insert(y, "'").toString();
+                if(dict.contains(newWord)){
+                    sugg.add(newWord);
+                }
+            add = new StringBuffer(word);
+        }
+        
+        return sugg;
+    }
+    
+   public static LinkedList<String> remLetter(String word, HashSet dict, LinkedList sugg){
+       String newWord = "";
+       StringBuffer rem = new StringBuffer(word);
+       
+       for(int x = 0; x<word.length(); x++){
+           newWord = rem.delete(x, x+1).toString();
+           if(dict.contains(newWord)){
+               sugg.add(newWord);
+           }
+           
+           rem = new StringBuffer(word);
+       }
+       return sugg;
+   }
+    
+    public static LinkedList<String> swpLetter(String word, HashSet dict, LinkedList sugg){
+        String newWord = "";
+        StringBuffer swp = new StringBuffer(word);
+        for(int x = 0; x<word.length()-1; x++){
+            swp.setCharAt(x, word.charAt(x+1));
+            swp.setCharAt(x+1, word.charAt(x));
+            newWord = swp.toString();
+            if(dict.contains(newWord)){
+                   sugg.add(newWord);
+               }
+           
+           swp = new StringBuffer(word);
+        }
+        
+        return sugg;
+    }
+            
+    
+}
