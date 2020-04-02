@@ -1,0 +1,35 @@
+/* This is the generic Stack class built using a doubly linked list
+ * uses the available size and isEmpty methods already in java's LL
+ * uses the first node as the top and works with only that end
+ */
+import java.util.LinkedList;
+
+public class MyStack <AnyType> {
+    private LinkedList myLL;
+    
+    public MyStack(){
+        myLL = new LinkedList();
+    }
+    
+    public void push (AnyType x){
+        myLL.addFirst(x);
+    }
+    
+    public AnyType pop(){
+        return (AnyType)myLL.remove();
+    }
+    
+    public AnyType peek(){
+        return (AnyType)myLL.getFirst();
+    }
+    
+    public boolean isEmpty(){
+        return myLL.isEmpty();
+    }
+    
+    public int size(){
+        return myLL.size();
+    }
+}
+
+
