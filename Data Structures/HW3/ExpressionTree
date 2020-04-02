@@ -1,0 +1,159 @@
+/** ExpressionTree class that takes in a postfix expression and creates a tree using algorithm, checks for invalid inputs as well.
+ * does all traversals revursively and gives excess () around subtrees in infix. 
+*/
+
+import java.util.LinkedList;
+
+public class ExrpressionTree{
+    
+    private ExpressionNode root;
+    private String postfix;
+    private boolean valid;
+    
+    private static class ExpressionNode{
+        ExpressionNode left, right;
+        String operator;
+        
+        public ExpressionNode(ExpressionNode lft, String oprtr, ExpressionNode rght){
+            left = lft;
+            operator = oprtr;
+            right = rght;
+        }
+    }
+    
+    public ExrpressionTree(String postfix){
+        postfix = postfix;
+        String[] splitpost = postfix.split(" ");
+        root = createExpressionTree(splitpost);
+        valid = checkValid(splitpost);
+    }
+    
+    private boolean checkValid(String[] post){
+        int counter = 0;
+        for(int x = 0; x<post.length; x++){
+            if(isOperator(post[x])){
+                counter--;
+            }else{
+                counter++;
+            } 
+            if(counter<0)
+               return false;
+        }
+        if(counter == 1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    public boolean isValid(){
+        return valid;
+    }
+    
+    private boolean isOperator(String s){
+        if( s.equals("+") || s.equals("-") || s.equals("*") || s.equals("/")){
+            return true;
+        }else
+            return false;
+    }
+    
+    private ExpressionNode createExpressionTree(String[] post){
+        LinkedList<ExpressionNode> tree = new LinkedList<ExpressionNode>();
+        for(int x = 0; x< post.length; x++){
+            if(isOperator(post[x])){
+                ExpressionNode right = tree.pop();
+                ExpressionNode left = tree.pop();
+                tree.push(new ExpressionNode(left, post[x], right));
+            }else{
+                tree.push(new ExpressionNode(null, post[x], null));
+            }
+        }
+        return tree.pop();
+    }
+    
+    public int eval(){
+        return eval(root);
+    }
+    
+    public String postfix(){
+        StringBuilder postfix = new StringBuilder();
+        postfix(root, postfix);
+        return postfix.toString();
+    }
+    
+    public String prefix(){
+        StringBuilder prefix = new StringBuilder();
+        prefix(root, prefix);
+        return prefix.toString();
+    }
+    
+    public String infix(){
+        StringBuilder infix = new StringBuilder();
+        infix(root, infix);
+        return infix.toString();
+    }
+    
+    private int eval(ExpressionNode root){
+        if(root != null){
+            if(root.left == null){
+                return Integer.parseInt(root.operator);
+            }else{
+                int left = eval(root.left);
+                int right = eval(root.right);
+                return calc(left, root.operator, right);
+            }
+        }
+        return 9999;
+    }
+    
+    private int calc(int x, String op,int y){
+        int total = 0;
+        switch(op){
+            case "+": total = x+y;
+                        break;
+            case "-": total = x-y;
+                        break;
+            case "*": total = x*y;
+                        break;
+            case "/": if(y ==0){
+                        System.out.println("Error cannot divide by 0");
+                        break;
+                      }
+                      total = x/y;
+                        break;
+        }
+        return total;
+    }
+            
+        
+    
+    private void postfix(ExpressionNode root, StringBuilder str){
+        if(root != null){
+            postfix(root.left, str);
+            postfix(root.right, str);
+            str.append(root.operator);
+            str.append(" ");
+        }
+    }
+    
+    private void prefix(ExpressionNode root, StringBuilder str){
+        if(root != null){
+            str.append(root.operator);
+            prefix(root.left, str);
+            prefix(root.right, str);
+            str.append(" ");
+        }
+    }
+
+    private void infix(ExpressionNode root, StringBuilder str){
+        if(root != null){
+            str.append("(");
+            infix(root.left, str);
+            str.append(root.operator);
+            infix(root.right, str);
+            str.append(")");
+        }
+    }
+
+
+}
